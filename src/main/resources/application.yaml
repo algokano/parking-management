@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: digital-parking-management
+  datasource:
+    url: jdbc:postgresql://localhost:5432/parking_db
+    username: parking
+    password: parking
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+server:
+  port: 8080

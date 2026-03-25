@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: parking-postgres
+    environment:
+      POSTGRES_DB: parking_db
+      POSTGRES_USER: parking
+      POSTGRES_PASSWORD: parking
+    ports:
+      - "5432:5432"
+    volumes:
+      - parking-data:/var/lib/postgresql/data
+
+volumes:
+  parking-data:

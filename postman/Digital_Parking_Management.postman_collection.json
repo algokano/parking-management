@@ -1,0 +1,682 @@
+{
+	"info": {
+		"name": "Digital Parking Management",
+		"description": "Full API collection for Digital Parking Management System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080"
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "vehicleId",
+			"value": ""
+		},
+		{
+			"key": "zoneId",
+			"value": ""
+		},
+		{
+			"key": "spaceId",
+			"value": ""
+		},
+		{
+			"key": "reservationId",
+			"value": ""
+		},
+		{
+			"key": "sessionId",
+			"value": ""
+		},
+		{
+			"key": "invoiceId",
+			"value": ""
+		},
+		{
+			"key": "paymentId",
+			"value": ""
+		}
+	],
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Register User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set('userId', jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"max.mustermann@example.com\",\n  \"firstName\": \"Max\",\n  \"lastName\": \"Mustermann\",\n  \"phoneNumber\": \"+49 231 1234567\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users"]
+						}
+					}
+				},
+				{
+					"name": "Get User",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/users/{{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users", "{{userId}}"]
+						}
+					}
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"max.mustermann@example.com\",\n  \"firstName\": \"Max\",\n  \"lastName\": \"Mustermann\",\n  \"phoneNumber\": \"+49 231 9999999\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/{{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users", "{{userId}}"]
+						}
+					}
+				},
+				{
+					"name": "Add Vehicle",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set('vehicleId', jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"licensePlate\": \"DO-PM 2024\",\n  \"make\": \"BMW\",\n  \"model\": \"3 Series\",\n  \"color\": \"Black\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/{{userId}}/vehicles",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users", "{{userId}}", "vehicles"]
+						}
+					}
+				},
+				{
+					"name": "List Vehicles",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/users/{{userId}}/vehicles",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users", "{{userId}}", "vehicles"]
+						}
+					}
+				},
+				{
+					"name": "Remove Vehicle",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "{{baseUrl}}/api/users/{{userId}}/vehicles/{{vehicleId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users", "{{userId}}", "vehicles", "{{vehicleId}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Zones",
+			"item": [
+				{
+					"name": "Create Zone",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set('zoneId', jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Dortmund Hauptbahnhof P1\",\n  \"address\": \"Königswall 15, 44137 Dortmund\",\n  \"zoneType\": \"GARAGE\",\n  \"hourlyRate\": 2.50,\n  \"latitude\": 51.5174,\n  \"longitude\": 7.4597\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/zones",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "zones"]
+						}
+					}
+				},
+				{
+					"name": "List Zones",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/zones",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "zones"]
+						}
+					}
+				},
+				{
+					"name": "Get Zone",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/zones/{{zoneId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "zones", "{{zoneId}}"]
+						}
+					}
+				},
+				{
+					"name": "Update Zone",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Dortmund Hauptbahnhof P1\",\n  \"address\": \"Königswall 15, 44137 Dortmund\",\n  \"zoneType\": \"GARAGE\",\n  \"hourlyRate\": 3.00,\n  \"latitude\": 51.5174,\n  \"longitude\": 7.4597\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/zones/{{zoneId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "zones", "{{zoneId}}"]
+						}
+					}
+				},
+				{
+					"name": "Get Occupancy",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/zones/{{zoneId}}/occupancy",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "zones", "{{zoneId}}", "occupancy"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Spaces",
+			"item": [
+				{
+					"name": "Add Space",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set('spaceId', jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"spaceNumber\": \"A-01\",\n  \"floor\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/zones/{{zoneId}}/spaces",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "zones", "{{zoneId}}", "spaces"]
+						}
+					}
+				},
+				{
+					"name": "Add Space 2",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"spaceNumber\": \"A-02\",\n  \"floor\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/zones/{{zoneId}}/spaces",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "zones", "{{zoneId}}", "spaces"]
+						}
+					}
+				},
+				{
+					"name": "List All Spaces",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/zones/{{zoneId}}/spaces",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "zones", "{{zoneId}}", "spaces"]
+						}
+					}
+				},
+				{
+					"name": "List Available Spaces",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/zones/{{zoneId}}/spaces/available",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "zones", "{{zoneId}}", "spaces", "available"]
+						}
+					}
+				},
+				{
+					"name": "Filter Spaces by Status",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/zones/{{zoneId}}/spaces?status=AVAILABLE",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "zones", "{{zoneId}}", "spaces"],
+							"query": [
+								{
+									"key": "status",
+									"value": "AVAILABLE"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Space Status (Maintenance)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"OUT_OF_SERVICE\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/zones/{{zoneId}}/spaces/{{spaceId}}/status",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "zones", "{{zoneId}}", "spaces", "{{spaceId}}", "status"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Reservations",
+			"item": [
+				{
+					"name": "Create Reservation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set('reservationId', jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"{{userId}}\",\n  \"vehicleId\": \"{{vehicleId}}\",\n  \"zoneId\": \"{{zoneId}}\",\n  \"spaceId\": \"{{spaceId}}\",\n  \"startTime\": \"2026-03-26T10:00:00\",\n  \"endTime\": \"2026-03-26T14:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/reservations",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "reservations"]
+						}
+					}
+				},
+				{
+					"name": "Get Reservation",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/reservations/{{reservationId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "reservations", "{{reservationId}}"]
+						}
+					}
+				},
+				{
+					"name": "List Reservations by User",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/reservations?userId={{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "reservations"],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Cancel Reservation",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{baseUrl}}/api/reservations/{{reservationId}}/cancel",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "reservations", "{{reservationId}}", "cancel"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Sessions",
+			"item": [
+				{
+					"name": "Start Session (with Reservation)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set('sessionId', jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"{{userId}}\",\n  \"vehicleId\": \"{{vehicleId}}\",\n  \"zoneId\": \"{{zoneId}}\",\n  \"spaceId\": \"{{spaceId}}\",\n  \"reservationId\": \"{{reservationId}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/sessions/start",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sessions", "start"]
+						}
+					}
+				},
+				{
+					"name": "Start Session (Walk-in)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set('sessionId', jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"{{userId}}\",\n  \"vehicleId\": \"{{vehicleId}}\",\n  \"zoneId\": \"{{zoneId}}\",\n  \"spaceId\": \"{{spaceId}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/sessions/start",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sessions", "start"]
+						}
+					}
+				},
+				{
+					"name": "Stop Session",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{baseUrl}}/api/sessions/{{sessionId}}/stop",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sessions", "{{sessionId}}", "stop"]
+						}
+					}
+				},
+				{
+					"name": "Get Session",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/sessions/{{sessionId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sessions", "{{sessionId}}"]
+						}
+					}
+				},
+				{
+					"name": "List Sessions by User",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/sessions?userId={{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sessions"],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "List Active Sessions",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/sessions?userId={{userId}}&status=ACTIVE",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sessions"],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								},
+								{
+									"key": "status",
+									"value": "ACTIVE"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Billing",
+			"item": [
+				{
+					"name": "List Invoices by User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.length > 0) {",
+									"  pm.collectionVariables.set('invoiceId', jsonData[0].id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/billing/invoices?userId={{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "billing", "invoices"],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Invoice",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/billing/invoices/{{invoiceId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "billing", "invoices", "{{invoiceId}}"]
+						}
+					}
+				},
+				{
+					"name": "Pay Invoice",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set('paymentId', jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"paymentMethod\": \"CREDIT_CARD\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/billing/invoices/{{invoiceId}}/pay",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "billing", "invoices", "{{invoiceId}}", "pay"]
+						}
+					}
+				},
+				{
+					"name": "Get Payment Record",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/billing/payments/{{paymentId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "billing", "payments", "{{paymentId}}"]
+						}
+					}
+				}
+			]
+		}
+	]
+}
