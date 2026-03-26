@@ -2,6 +2,16 @@
 
 A full-stack monorepo for managing parking zones, reservations, sessions, and billing in Dortmund.
 
+## Screenshots
+
+### Citizen — Browse Zones (with interactive Dortmund map)
+
+![Citizen Zones](docs/screenshots/citizen-zones.png)
+
+### Admin — Dashboard (occupancy stats & pricing overview)
+
+![Admin Dashboard](docs/screenshots/admin-dashboard.png)
+
 ## Tech Stack
 
 | Layer | Technology |
