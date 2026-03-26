@@ -1,6 +1,6 @@
 # Digital Parking Management System
 
-A full-stack monorepo for managing parking zones, reservations, sessions, and billing in Dortmund.
+A full-stack application for managing parking zones, reservations, sessions, and billing in Dortmund — built with a **Spring Modulith** (modular monolith) backend and a React frontend.
 
 ## Screenshots
 
@@ -12,6 +12,57 @@ A full-stack monorepo for managing parking zones, reservations, sessions, and bi
 
 ![Admin Dashboard](docs/screenshots/admin-dashboard.png)
 
+## Architecture
+
+The backend follows the **Modulith** pattern using [Spring Modulith](https://spring.io/projects/spring-modulith) — a single deployable Spring Boot application with strictly enforced module boundaries. Each module owns its domain, exposes a public API, and communicates with other modules via direct calls (synchronous) or domain events (asynchronous).
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   Spring Boot Application                   │
+│                     (Single Deployment)                      │
+│                                                             │
+│  ┌──────────┐  ┌─────────────┐  ┌─────────┐  ┌──────────┐ │
+│  │   Zone   │  │ Reservation │  │ Session │  │ Billing  │ │
+│  │  Module   │←─│   Module    │  │  Module  │─→│  Module  │ │
+│  │          │  │             │  │         │  │          │ │
+│  │ zones    │  │ reservations│  │ sessions│  │ invoices │ │
+│  │ spaces   │  │ events      │  │ events  │  │ payments │ │
+│  │ occupancy│  └─────────────┘  └────┬────┘  │ gateway  │ │
+│  └──────────┘                        │       └──────────┘ │
+│       ↑            ┌──────────┐      │  SessionCompleted   │
+│       │            │   User   │      │   (domain event)    │
+│       └────────────│  Module  │←─────┘                     │
+│                    │          │                             │
+│  ┌──────────┐     │ users    │     ┌────────────┐         │
+│  │   Auth   │────→│ vehicles │     │   Shared   │         │
+│  │  Module   │     └──────────┘     │   Module   │         │
+│  │ JWT/login │                      │ errors     │         │
+│  └──────────┘                      │ constants  │         │
+│                                     └────────────┘         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Module Boundaries
+
+Each module declares its allowed dependencies via `@ApplicationModule`. Spring Modulith enforces these at compile time — a module cannot access another module's internals.
+
+| Module | Depends On | Communicates Via |
+|--------|-----------|-----------------|
+| **Zone** | — (leaf) | Direct calls (public service) |
+| **User** | — (leaf) | Direct calls (public service) |
+| **Auth** | User | Direct calls |
+| **Reservation** | Zone, User | Sync calls + publishes `ReservationCreated` event |
+| **Session** | Zone, User, Reservation | Sync calls + publishes `SessionCompleted` event |
+| **Billing** | Session only | Consumes `SessionCompleted` event (async) |
+
+### Key Modulith Patterns Used
+
+- **`@ApplicationModule(allowedDependencies)`** — enforces which modules can depend on which
+- **`@Modulithic(sharedModules)`** — marks shared utilities available to all modules
+- **`ApplicationEventPublisher`** — publishes domain events within the modulith
+- **`@ApplicationModuleListener`** — listens for events from other modules (e.g., billing listens to session)
+- **`spring-modulith-starter-jpa`** — durable event publication via `event_publication` table (at-least-once delivery)
+
 ## Tech Stack
 
 | Layer | Technology |
@@ -20,7 +71,7 @@ A full-stack monorepo for managing parking zones, reservations, sessions, and bi
 | Frontend | React 19, TypeScript, Vite, Tailwind CSS v4, React Router v7 |
 | Database | PostgreSQL 17, Flyway migrations |
 | Auth | JWT (stateless), Spring Security, BCrypt |
-| Map | Leaflet + OpenStreetMap (no API key) |
+| Map | Leaflet + OpenStreetMap (no API key required) |
 
 ## Project Structure
 
@@ -30,11 +81,11 @@ digital-parking-management/
 │   ├── src/main/java/.../
 │   │   ├── auth/                    JWT authentication & Spring Security
 │   │   ├── billing/                 Invoices, payments, payment gateway
-│   │   ├── reservation/             Parking reservations & events
+│   │   ├── reservation/             Parking reservations & domain events
 │   │   ├── session/                 Parking sessions & SessionCompleted event
 │   │   ├── shared/                  Global error handling, constants
 │   │   ├── user/                    Users, vehicles, profile
-│   │   └── zone/                    Zones, spaces, occupancy
+│   │   └── zone/                    Zones, spaces, occupancy (sole authority on space status)
 │   ├── src/main/resources/
 │   │   ├── application.yaml         App config (DB, JWT, Flyway)
 │   │   └── db/migration/            Flyway SQL migrations (V1–V3)
@@ -90,7 +141,7 @@ npm install
 npm run dev
 ```
 
-Frontend runs on http://localhost:5173 with API proxy to backend (no CORS issues in dev).
+Frontend runs on http://localhost:5173 with API proxy to backend.
 
 ## Demo Credentials
 
@@ -186,10 +237,11 @@ Frontend runs on http://localhost:5173 with API proxy to backend (no CORS issues
 | Sessions | 1 completed + 1 active |
 | Invoices | 1 pending (5.00 EUR, Stadtgarten Parkhaus) |
 
-## Architecture Decisions
+## Domain Events
 
-- **Spring Modulith** — modular monolith with enforced module boundaries via `@ApplicationModule`
-- **Domain events** — `SessionCompleted` event auto-triggers invoice creation in billing module
-- **Zone as sole authority** — only the zone module can change space status (AVAILABLE/OCCUPIED/RESERVED)
-- **JWT stateless auth** — simple Bearer token, no server-side sessions
-- **Vite proxy** — frontend dev server proxies `/api` to backend, eliminating CORS in development
+The modulith uses Spring's event system for inter-module communication where eventual consistency is acceptable:
+
+- **`SessionCompleted`** — published by Session module when parking ends. Carries a pricing snapshot (hourlyRate, zoneName, duration). Consumed by Billing module to auto-generate an invoice. Stored durably in `event_publication` table for at-least-once delivery.
+- **`ReservationCreated`** / **`ReservationCancelled`** — published by Reservation module. Available for future consumers.
+
+This decouples Billing from Zone — billing never reads zone data directly. All pricing info arrives via the event snapshot.
