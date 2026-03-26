@@ -16,31 +16,7 @@ A full-stack application for managing parking zones, reservations, sessions, and
 
 The backend follows the **Modulith** pattern using [Spring Modulith](https://spring.io/projects/spring-modulith) — a single deployable Spring Boot application with strictly enforced module boundaries. Each module owns its domain, exposes a public API, and communicates with other modules via direct calls (synchronous) or domain events (asynchronous).
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                   Spring Boot Application                   │
-│                     (Single Deployment)                      │
-│                                                             │
-│  ┌──────────┐  ┌─────────────┐  ┌─────────┐  ┌──────────┐ │
-│  │   Zone   │  │ Reservation │  │ Session │  │ Billing  │ │
-│  │  Module   │←─│   Module    │  │  Module  │─→│  Module  │ │
-│  │          │  │             │  │         │  │          │ │
-│  │ zones    │  │ reservations│  │ sessions│  │ invoices │ │
-│  │ spaces   │  │ events      │  │ events  │  │ payments │ │
-│  │ occupancy│  └─────────────┘  └────┬────┘  │ gateway  │ │
-│  └──────────┘                        │       └──────────┘ │
-│       ↑            ┌──────────┐      │  SessionCompleted   │
-│       │            │   User   │      │   (domain event)    │
-│       └────────────│  Module  │←─────┘                     │
-│                    │          │                             │
-│  ┌──────────┐     │ users    │     ┌────────────┐         │
-│  │   Auth   │────→│ vehicles │     │   Shared   │         │
-│  │  Module   │     └──────────┘     │   Module   │         │
-│  │ JWT/login │                      │ errors     │         │
-│  └──────────┘                      │ constants  │         │
-│                                     └────────────┘         │
-└─────────────────────────────────────────────────────────────┘
-```
+![Component Architecture](docs/screenshots/component_arch.png)
 
 ### Module Boundaries
 
