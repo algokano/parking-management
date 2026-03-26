@@ -1,10 +1,10 @@
 # Digital Parking Management System
 
-A full-stack application for managing parking zones, reservations, sessions, and billing in Dortmund — built with a **Spring Modulith** (modular monolith) backend and a React frontend.
+A full-stack application for managing parking zones, reservations, sessions, and billing — built with a **Spring Modulith** (modular monolith) backend and a React frontend.
 
 ## Screenshots
 
-### Citizen — Browse Zones (with interactive Dortmund map)
+### Citizen — Browse Zones (with interactive map)
 
 ![Citizen Zones](docs/screenshots/citizen-zones.png)
 
@@ -155,7 +155,7 @@ Frontend runs on http://localhost:5173 with API proxy to backend.
 ### Citizen
 
 - **Dashboard** — summary cards (active sessions, reservations, pending invoices, available zones)
-- **Browse Zones** — interactive Leaflet map of Dortmund + zone cards with occupancy bars
+- **Browse Zones** — interactive Leaflet map + zone cards with occupancy bars
 - **Zone Detail** — view spaces, reserve a space, or start a walk-in session
 - **My Vehicles** — add / remove vehicles
 - **My Reservations** — view active reservations, cancel
@@ -231,7 +231,7 @@ Frontend runs on http://localhost:5173 with API proxy to backend.
 |--------|---------|
 | Users | 2 (admin + citizen with BCrypt passwords) |
 | Vehicles | 3 (VW Golf, BMW 3 Series, Audi A4) |
-| Zones | 5 Dortmund locations (Stadtgarten, Westenhellweg, Signal Iduna Park, Thier-Galerie, Phoenixsee) |
+| Zones | 5 locations (Stadtgarten, Westenhellweg, Signal Iduna Park, Thier-Galerie, Phoenixsee) |
 | Spaces | 24 total (mix of AVAILABLE, OCCUPIED, RESERVED, OUT_OF_SERVICE) |
 | Reservations | 1 active (citizen, Westenhellweg) |
 | Sessions | 1 completed + 1 active |
