@@ -2,6 +2,7 @@ package com.dortmund.digital_parking_management.user;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -76,6 +77,19 @@ public class UserService {
     }
 
     // ---- Public methods for other modules ----
+
+    public Optional<AppUser> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Transactional
+    public AppUser saveUser(AppUser user) {
+        return userRepository.save(user);
+    }
+
+    public AppUser findUserById(UUID userId) {
+        return findUser(userId);
+    }
 
     public void validateUserExists(UUID userId) {
         findUser(userId);

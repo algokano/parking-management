@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.dortmund.digital_parking_management.auth.model.UserRole;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -16,6 +18,11 @@ public class AppUser {
 
     @Column(unique = true)
     private String email;
+
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     @Column(name = "first_name")
     private String firstName;
@@ -41,11 +48,26 @@ public class AppUser {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
+        this.role = UserRole.CITIZEN;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public AppUser(String email, String password, String firstName, String lastName,
+                   String phoneNumber, UserRole role) {
+        this.id = UUID.randomUUID();
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
         this.createdAt = LocalDateTime.now();
     }
 
     public UUID getId() { return id; }
     public String getEmail() { return email; }
+    public String getPassword() { return password; }
+    public UserRole getRole() { return role; }
     public String getFirstName() { return firstName; }
     public String getLastName() { return lastName; }
     public String getPhoneNumber() { return phoneNumber; }
