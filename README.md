@@ -41,13 +41,40 @@ Each module declares its allowed dependencies via `@ApplicationModule`. Spring M
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Backend | Spring Boot 4.0.4, Spring Modulith 2.0.0, Java 17 |
-| Frontend | React 19, TypeScript, Vite, Tailwind CSS v4, React Router v7 |
-| Database | PostgreSQL 17, Flyway migrations |
-| Auth | JWT (stateless), Spring Security, BCrypt |
-| Map | Leaflet + OpenStreetMap (no API key required) |
+### Backend
+
+| Technology | Version | Purpose |
+|-----------|---------|---------|
+| Java | 17 | Language runtime |
+| Spring Boot | 4.0.4 | Application framework |
+| Spring Modulith | 2.0.0 | Modular monolith architecture & event system |
+| Spring Security | 7.x | Authentication & authorization |
+| Spring Data JPA | 4.x | ORM & repository abstraction |
+| Hibernate | 7.x | JPA implementation |
+| JJWT | 0.12.6 | JWT token creation & validation |
+| Flyway | latest | Database schema migrations & seed data |
+| PostgreSQL | 17 | Relational database |
+| Maven | 3.9.x | Build tool (via Maven Wrapper) |
+
+### Frontend
+
+| Technology | Version | Purpose |
+|-----------|---------|---------|
+| React | 19.2 | UI library |
+| TypeScript | 5.9 | Type-safe JavaScript |
+| Vite | 8.0 | Build tool & dev server |
+| Tailwind CSS | 4.2 | Utility-first CSS framework |
+| React Router | 7.13 | Client-side routing & route guards |
+| Axios | 1.13 | HTTP client with JWT interceptor |
+| Leaflet | 1.9 | Interactive maps (OpenStreetMap, no API key) |
+| React Leaflet | 5.0 | React bindings for Leaflet |
+
+### Infrastructure
+
+| Technology | Purpose |
+|-----------|---------|
+| Docker Compose | PostgreSQL container orchestration |
+| Vite Proxy | Frontend `/api` requests proxied to backend (no CORS in dev) |
 
 ## Project Structure
 
